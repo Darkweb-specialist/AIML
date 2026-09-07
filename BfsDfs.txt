@@ -1,0 +1,59 @@
+from collections import deque
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': [],
+    'E': ['H'],
+    'F': [],
+    'G': [],
+    'H': []
+}
+
+def bfs(graph, start, goal):
+    queue = deque([[start]])
+    visited = set()
+
+    while queue:
+        path = queue.popleft()
+        node = path[-1]
+
+        if node == goal:
+            return path
+
+        if node not in visited:
+            visited.add(node)
+            for neighbour in graph[node]:
+                new_path = path + [neighbour]
+                queue.append(new_path)
+
+    return None
+
+def dfs(graph, start, goal):
+    stack = [[start]]
+    visited = set()
+
+    while stack:
+        path = stack.pop()
+        node = path[-1]
+
+        if node == goal:
+            return path
+
+        if node not in visited:
+            visited.add(node)
+            for neighbour in reversed(graph[node]):
+                new_path = path + [neighbour]
+                stack.append(new_path)
+
+    return None
+
+start = 'A'
+goal = 'H'
+
+bfs_path = bfs(graph, start, goal)
+dfs_path = dfs(graph, start, goal)
+
+print("BFS Path:", " -> ".join(bfs_path) if bfs_path else "No path found")
+print("DFS Path:", " -> ".join(dfs_path) if dfs_path else "No path found")

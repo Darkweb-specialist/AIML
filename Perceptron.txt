@@ -1,0 +1,40 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Perceptron
+
+iris = load_iris()
+X, y = iris.data[:, :2], iris.target
+
+# Binary classification: Setosa vs Versicolor
+X, y = X[y != 2], y[y != 2]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+model = Perceptron(max_iter=1000, random_state=42)
+model.fit(X_train, y_train)
+
+print("Training Accuracy:", model.score(X_train, y_train))
+print("Testing Accuracy:", model.score(X_test, y_test))
+print("Weights:", model.coef_)
+print("Bias:", model.intercept_)
+
+plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train,
+            marker="o", label="Train")
+plt.scatter(X_test[:, 0], X_test[:, 1], c=y_test,
+            marker="x", label="Test")
+
+w1, w2 = model.coef_[0]
+b = model.intercept_[0]
+x = np.linspace(X[:, 0].min(), X[:, 0].max(), 100)
+plt.plot(x, -(w1*x + b)/w2, "k-", label="Decision Boundary")
+
+plt.xlabel("Sepal Length (cm)")
+plt.ylabel("Sepal Width (cm)")
+plt.title("Single-Layer Perceptron")
+plt.legend()
+plt.show()

@@ -1,0 +1,23 @@
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+data = pd.read_csv("reg_data.csv")
+
+X = data[["Study_Hours"]]
+y = data["Exam_Score"]
+
+model = LinearRegression()
+model.fit(X, y)
+
+hours = float(input("Enter the hours of studies: "))
+score = model.predict(pd.DataFrame({"Study_Hours": [hours]}))[0]
+print("Predicted Score:", score)
+
+plt.scatter(X, y, color="red")
+plt.plot(X, model.predict(X), color="blue")
+plt.xlabel("Hours Studied")
+plt.ylabel("Exam Score")
+plt.title("Linear Regression for Study Hours and Exam Score")
+plt.show()
